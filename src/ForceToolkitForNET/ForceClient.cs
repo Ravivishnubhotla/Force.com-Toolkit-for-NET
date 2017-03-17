@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Reflection;
 using Salesforce.Common;
+using Salesforce.Common.Models;
 using Salesforce.Common.Models.Json;
 using Salesforce.Common.Models.Xml;
 
@@ -98,7 +99,18 @@ namespace Salesforce.Force
             return await _jsonHttpClient.HttpPostAsync<SuccessResponse>(record, string.Format("sobjects/{0}", objectName)).ConfigureAwait(false);
         }
 
-        public Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record)
+        public async Task<SaveResponse> CreateCompositeTreeAsync(string objectName, CreateRequest request)
+        {
+            if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            var result = await _jsonHttpClient.HttpPostAsync<SaveResponse>(request, string.Format("composite/tree/{0}", objectName)).ConfigureAwait(false);
+
+            return result;
+        }
+
+    public Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record)
         {
             if (string.IsNullOrEmpty(objectName)) throw new ArgumentNullException("objectName");
             if (string.IsNullOrEmpty(recordId)) throw new ArgumentNullException("recordId");
@@ -357,6 +369,13 @@ namespace Salesforce.Force
         {
             _jsonHttpClient.Dispose();
             _xmlHttpClient.Dispose();
+        }
+
+        public async Task<CompositeResponseBody> CreateCompositeAsync(CompositeRequestRoot request)
+        {            
+            if (request == null) throw new ArgumentNullException("request");
+
+            return await _jsonHttpClient.HttpPostAsync<CompositeResponseBody>(request, "composite").ConfigureAwait(false);
         }
     }
 }

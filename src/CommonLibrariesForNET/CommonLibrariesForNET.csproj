@@ -43,7 +43,17 @@
     <AssemblyOriginatorKeyFile>..\ForceTookitForNet.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Models\AttributeInfo.cs" />
     <Compile Include="AuthenticationClient.cs" />
+    <Compile Include="Models\CompositeRequest.cs" />
+    <Compile Include="Models\CompositeRequestRoot.cs" />
+    <Compile Include="Models\CompositeResponse.cs" />
+    <Compile Include="Models\CompositeResponseBody.cs" />
+    <Compile Include="Models\CompositeResponseHttpHeaders.cs" />
+    <Compile Include="Models\CompositeResponseRoot.cs" />
+    <Compile Include="Models\CreateRequest.cs" />
+    <Compile Include="Models\ErrorResult.cs" />
+    <Compile Include="IAttributeObject.cs" />
     <Compile Include="Internals\BaseHttpClient.cs" />
     <Compile Include="Internals\BaseHttpClientException.cs" />
     <Compile Include="Common.cs" />
@@ -75,8 +85,11 @@
     <Compile Include="Models\Xml\JobInfoState.cs" />
     <Compile Include="Models\Xml\SObject.cs" />
     <Compile Include="Models\Xml\SObjectList.cs" />
+    <Compile Include="Models\ObjectAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Json\ResponseTypes.cs" />
+    <Compile Include="Models\SaveResponse.cs" />
+    <Compile Include="Models\SaveResult.cs" />
     <Compile Include="Serializer\CreateableContractResolver.cs" />
     <Compile Include="Serializer\UpdateableContractResolver.cs" />
     <Compile Include="JsonHttpClient.cs" />

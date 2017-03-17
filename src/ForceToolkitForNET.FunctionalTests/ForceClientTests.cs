@@ -10,6 +10,8 @@ using NUnit.Framework;
 using Salesforce.Common;
 using Salesforce.Common.Models.Json;
 using Salesforce.Force.FunctionalTests.Models;
+using Salesforce.Common.Models;
+using System.Collections.Generic;
 //using WadeWegner.Salesforce.SOAPHelpers;
 
 namespace Salesforce.Force.FunctionalTests
@@ -53,8 +55,8 @@ namespace Salesforce.Force.FunctionalTests
         public async Task AsyncTaskCompletion_ExpandoObject()
         {
             dynamic account = new ExpandoObject();
-            account.Name = "ExpandoName" + DateTime.Now.Ticks;
-            account.Description = "ExpandoDescription" + DateTime.Now.Ticks;
+            account.Name = "ExpandoName";
+            account.Description = "ExpandoDescription";
 
             var result = await _client.CreateAsync("Account", account);
 
@@ -69,35 +71,35 @@ namespace Salesforce.Force.FunctionalTests
             Assert.IsNotNull(userInfo);
         }
 
-        [Test]
-        public async Task Query_Accounts_Continuation()
-        {
-            var accounts = await _client.QueryAsync<Account>("SELECT count() FROM Account");
+        //[Test]
+        //public async Task Query_Accounts_Continuation()
+        //{
+        //    var accounts = await _client.QueryAsync<Account>("SELECT count() FROM Account");
 
-            if (accounts.TotalSize < 1000)
-            {
-                await CreateLotsOfAccounts(_client);
-            }
+        //    if (accounts.TotalSize < 1000)
+        //    {
+        //        await CreateLotsOfAccounts(_client);
+        //    }
 
-            var contacts = await _client.QueryAsync<dynamic>("SELECT Id, Name, Description FROM Account");
+        //    var contacts = await _client.QueryAsync<dynamic>("SELECT Id, Name, Description FROM Account");
 
-            var nextRecordsUrl = contacts.NextRecordsUrl;
-            var nextContacts = await _client.QueryContinuationAsync<dynamic>(nextRecordsUrl);
+        //    var nextRecordsUrl = contacts.NextRecordsUrl;
+        //    var nextContacts = await _client.QueryContinuationAsync<dynamic>(nextRecordsUrl);
 
-            Assert.IsNotNull(nextContacts);
-            Assert.AreNotEqual(contacts, nextContacts);
-        }
+        //    Assert.IsNotNull(nextContacts);
+        //    Assert.AreNotEqual(contacts, nextContacts);
+        //}
 
-        public async Task CreateLotsOfAccounts(ForceClient forceClient)
-        {
-            var account = new Account { Name = "Test Account", Description = "New Account Description" };
+        //public async Task CreateLotsOfAccounts(ForceClient forceClient)
+        //{
+        //    var account = new Account { Name = "Test Account", Description = "New Account Description" };
 
-            for (var i = 0; i < 1000; i++)
-            {
-                account.Name = "Test Account (" + i + ")";
-                await forceClient.CreateAsync("Account", account);
-            }
-        }
+        //    for (var i = 0; i < 1000; i)
+        //    {
+        //        account.Name = "Test Account ("  i  ")";
+        //        await forceClient.CreateAsync("Account", account);
+        //    }
+        //}
 
         [Test]
         public async Task Query_Count()
@@ -158,24 +160,24 @@ namespace Salesforce.Force.FunctionalTests
             Assert.IsNotNull(accounts);
         }
 
-        [Test]
-        public async Task QueryAll_Accounts_Continuation()
-        {
-            var accounts = await _client.QueryAllAsync<Account>("SELECT count() FROM Account");
+        //[Test]
+        //public async Task QueryAll_Accounts_Continuation()
+        //{
+        //    var accounts = await _client.QueryAllAsync<Account>("SELECT count() FROM Account");
 
-            if (accounts.TotalSize < 1000)
-            {
-                await CreateLotsOfAccounts(_client);
-            }
+        //    if (accounts.TotalSize < 1000)
+        //    {
+        //        await CreateLotsOfAccounts(_client);
+        //    }
 
-            var contacts = await _client.QueryAllAsync<dynamic>("SELECT Id, Name, Description FROM Account");
+        //    var contacts = await _client.QueryAllAsync<dynamic>("SELECT Id, Name, Description FROM Account");
 
-            var nextRecordsUrl = contacts.NextRecordsUrl;
-            var nextContacts = await _client.QueryContinuationAsync<dynamic>(nextRecordsUrl);
+        //    var nextRecordsUrl = contacts.NextRecordsUrl;
+        //    var nextContacts = await _client.QueryContinuationAsync<dynamic>(nextRecordsUrl);
 
-            Assert.IsNotNull(nextContacts);
-            Assert.AreNotEqual(contacts, nextContacts);
-        }
+        //    Assert.IsNotNull(nextContacts);
+        //    Assert.AreNotEqual(contacts, nextContacts);
+        //}
 
         [Test]
         public async Task Create_Contact_Typed_Annotations()
@@ -392,7 +394,7 @@ namespace Salesforce.Force.FunctionalTests
         //{
         //    const string objectName = "Account";
         //    const string fieldName = "ExternalId__c";
-        //    var fieldId = "123" + DateTime.Now.Ticks;
+        //    var fieldId = "123"  DateTime.Now.Ticks;
 
         //    await CreateExternalIdField(objectName, fieldName);
 
@@ -525,8 +527,8 @@ namespace Salesforce.Force.FunctionalTests
 
         //    await CreateExternalIdField(objectName, fieldName);
 
-        //    var account = new Account { Name = "Upserted Account" + DateTime.Now.Ticks, Description = "New Upserted Account Description" + DateTime.Now.Ticks };
-        //    var success = await _client.UpsertExternalAsync(objectName, fieldName, "123" + DateTime.Now.Ticks, account);
+        //    var account = new Account { Name = "Upserted Account"  DateTime.Now.Ticks, Description = "New Upserted Account Description"  DateTime.Now.Ticks };
+        //    var success = await _client.UpsertExternalAsync(objectName, fieldName, "123"  DateTime.Now.Ticks, account);
 
         //    Assert.IsNotNull(success);
         //    Assert.IsNotNull(success.Id);
@@ -614,7 +616,7 @@ namespace Salesforce.Force.FunctionalTests
         [Test]
         public async Task QueryLeadWithUnescapedCharactersInEmail()
         {
-            const string query = "SELECT Id FROM Lead WHERE email = 'forcetoolkit+issue@gmail.com'";
+            const string query = "SELECT Id FROM Lead WHERE email = 'forcetoolkitissue@gmail.com'";
             var result = await _client.QueryAsync<dynamic>(query);
 
             Assert.IsNotNull(result);
@@ -662,17 +664,17 @@ namespace Salesforce.Force.FunctionalTests
             Assert.IsTrue(eventSuccessResponse.Success);
         }
 
-        [Test]
-        public async Task ExecuteRestApiPost()
-        {
-            const string echo = "Thing to echo";
+        //[Test]
+        //public async Task ExecuteRestApiPost()
+        //{
+        //    const string echo = "Thing to echo";
 
-            var json = JObject.Parse(@"{'toecho':'" + echo + "'}");
-            var response = await _client.ExecuteRestApiAsync<dynamic>("RestWSTest", json);
+        //    var json = JObject.Parse(@"{'toecho':'"  echo  "'}");
+        //    var response = await _client.ExecuteRestApiAsync<dynamic>("RestWSTest", json);
 
-            Assert.IsNotNull(response);
-            Assert.AreEqual(echo, response);
-        }
+        //    Assert.IsNotNull(response);
+        //    Assert.AreEqual(echo, response);
+        //}
 
         [Test]
         public async Task ExecuteRestApiGet()
@@ -685,6 +687,41 @@ namespace Salesforce.Force.FunctionalTests
             Assert.AreEqual(echo, response);
         }
 
+        [Test]
+         public async Task Create_Accounts_Typed()
+         {
+             var lstAccounts = new List<IAttributedObject>();
+ 
+             lstAccounts.Add(new AtrributedAccount { Name = "New Account 1", Description = "New Account Description", Attributes = new ObjectAttributes()
+                 {
+                     Type = "Account",
+                     ReferenceId="ACC1",
+                 },
+             });
+             lstAccounts.Add(new AtrributedAccount { Name = "New Account 2", Description = "New Account Description",
+                 Attributes = new ObjectAttributes()
+                 {
+                     Type = "Account",
+                     ReferenceId = "ACC2",
+                 },
+             });
+             lstAccounts.Add(new AtrributedAccount { Name = "New Account 3", Description = "New Account Description",
+                 Attributes = new ObjectAttributes()
+                 {
+                     Type = "Account",
+                     ReferenceId = "ACC3",
+                 },
+             });
+ 
+             var theRequest = new CreateRequest()
+             {
+                 Records = lstAccounts
+             };
+ 
+             var successResponse = await _client.CreateCompositeTreeAsync("Account", theRequest);
+ 
+             Assert.That(successResponse.Results, Is.Not.Null.And.Not.Empty);
+         }
 
         //#region Private methods
         //private static async Task CreateExternalIdField(string objectName, string fieldName)
