@@ -8,6 +8,6 @@ namespace Salesforce.Common.Models
 {
     public class CompositeResponseRoot
     {
-        public List<CompositeResponse> compositeResponse { get; set; }
+        public CompositeResponse[] compositeResponse { get; set; }
     }
 }
