@@ -9,6 +9,7 @@ namespace Salesforce.Common.Models
     public class CompositeResponse
     {
         private object _bodyValue = null;
+        private CompositeResponseBody[] _arrCompositeBody = null;
 
         public object body {
             get
@@ -20,13 +21,12 @@ namespace Salesforce.Common.Models
             {
                 _bodyValue = value;
                 //Check object value type
-                if (_bodyValue == null) Results = null;
-                if (_bodyValue != null && _bodyValue.GetType().Name.Equals("JArray")) Results = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CompositeResponseBody>>(_bodyValue.ToString());
+                if (_bodyValue == null) _arrCompositeBody = null;
+                if (_bodyValue != null && _bodyValue.GetType().Name.Equals("JArray")) _arrCompositeBody = Newtonsoft.Json.JsonConvert.DeserializeObject<CompositeResponseBody[]>(_bodyValue.ToString());
                 if (_bodyValue != null && !_bodyValue.GetType().Name.Equals("JArray"))
                 {
                     CompositeResponseBody _body1 = Newtonsoft.Json.JsonConvert.DeserializeObject<CompositeResponseBody>(_bodyValue.ToString());
-                    Results = new List<CompositeResponseBody>();
-                    Results.Add(_body1);                   
+                    _arrCompositeBody = new CompositeResponseBody[] { _body1 };                             
                 }
 
             }
@@ -34,6 +34,9 @@ namespace Salesforce.Common.Models
         public CompositeResponseHttpHeaders httpHeaders { get; set; }
         public int httpStatusCode { get; set; }
         public string referenceId { get; set; }
-        public List<CompositeResponseBody> Results { get; set; }
+        public CompositeResponseBody[] Results {
+            get
+            { return _arrCompositeBody; }
+        }
     }
 }
