@@ -15,8 +15,8 @@ namespace Salesforce.Force
 {
     public class ForceClient : IForceClient, IDisposable
     {
-        private readonly XmlHttpClient _xmlHttpClient;
-        private readonly JsonHttpClient _jsonHttpClient;
+        protected readonly XmlHttpClient _xmlHttpClient;
+        protected readonly JsonHttpClient _jsonHttpClient;
         public ISelectListResolver SelectListResolver { get; set; }
 
         public ForceClient(string instanceUrl, string accessToken, string apiVersion)
@@ -58,6 +58,13 @@ namespace Salesforce.Force
             if (string.IsNullOrEmpty(query)) throw new ArgumentNullException("query");
 
             return _jsonHttpClient.HttpGetAsync<QueryResult<T>>(string.Format("queryAll/?q={0}", Uri.EscapeDataString(query)));
+        }
+
+        public Task<T> ExecuteReportAsync<T>(string reportName)
+        {
+            if (string.IsNullOrEmpty(reportName)) throw new ArgumentNullException("reportName");
+
+            return _jsonHttpClient.HttpGetAsync<T>(string.Format("analytics/reports/{0}?includeDetails=true", reportName));
         }
 
         public async Task<T> ExecuteRestApiAsync<T>(string apiName)
