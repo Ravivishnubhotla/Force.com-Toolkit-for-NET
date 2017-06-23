@@ -130,6 +130,36 @@ namespace Salesforce.Common
             }
         }
 
+        #region Added by Ravi Vishnubhotla to handle null values scenario
+        //Added these scenario's to handle null values
+        public async Task<T> HttpPostAsync<T>(object inputObject, string urlSuffix,bool isAllowNullValues)
+        {
+            var url = Common.FormatUrl(urlSuffix, InstanceUrl, ApiVersion);
+            return await HttpPostAsync<T>(inputObject, url, isAllowNullValues);
+        }
+
+        public async Task<T> HttpPostAsync<T>(object inputObject, Uri uri,bool isAllowNullValues)
+        {
+            var json = JsonConvert.SerializeObject(inputObject,
+                   Formatting.None,
+                   new JsonSerializerSettings
+                   {
+                       NullValueHandling = (isAllowNullValues ? NullValueHandling.Include : NullValueHandling.Ignore),
+                       ContractResolver = new CreateableContractResolver(),
+                       DateFormatString = DateFormat
+                   });
+            try
+            {
+                var response = await HttpPostAsync(json, uri);
+                return JsonConvert.DeserializeObject<T>(response);
+            }
+            catch (BaseHttpClientException e)
+            {
+                throw ParseForceException(e.Message);
+            }
+        }
+
+        #endregion 
         public async Task<T> HttpPostRestApiAsync<T>(string apiName, object inputObject)
         {
             var url = Common.FormatRestApiUrl(apiName, InstanceUrl);

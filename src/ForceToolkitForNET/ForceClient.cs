@@ -393,11 +393,16 @@ namespace Salesforce.Force
             _xmlHttpClient.Dispose();
         }
 
-        public async Task<CompositeResponseRoot> CreateCompositeAsync(CompositeRequestRoot request)
+        public async Task<CompositeResponseRoot> CreateCompositeAsync(CompositeRequestRoot request,bool isAllowNullValues=false)
         {            
             if (request == null) throw new ArgumentNullException("request");
-
-            return await _jsonHttpClient.HttpPostAsync<CompositeResponseRoot>(request, "composite").ConfigureAwait(false);
+            //Modified the code to include allow null values
+            /// <summary>
+            /// Added this to let null values to stopped ignored and allow them processed. Use it with caution
+            /// Default value is false
+            /// </summary>
+            return await _jsonHttpClient.HttpPostAsync<CompositeResponseRoot>(request, "composite", isAllowNullValues).ConfigureAwait(false);
+            //return await _jsonHttpClient.HttpPostAsync<CompositeResponseRoot>(request, "composite").ConfigureAwait(false);
         }
     }
 }

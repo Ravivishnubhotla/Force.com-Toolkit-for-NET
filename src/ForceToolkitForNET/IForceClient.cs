@@ -20,7 +20,7 @@ namespace Salesforce.Force
         Task<T> ExecuteRestApiAsync<T>(string apiName, object inputObject);
         Task<SuccessResponse> CreateAsync(string objectName, object record);
         Task<SaveResponse> CreateCompositeTreeAsync(string objectName, CreateRequest request);
-        Task<CompositeResponseRoot> CreateCompositeAsync(CompositeRequestRoot request);
+        Task<CompositeResponseRoot> CreateCompositeAsync(CompositeRequestRoot request,bool isAllowNullValues);
         Task<SuccessResponse> UpdateAsync(string objectName, string recordId, object record);
         Task<SuccessResponse> UpsertExternalAsync(string objectName, string externalFieldName, string externalId, object record);
         Task<bool> DeleteAsync(string objectName, string recordId);
